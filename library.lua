@@ -244,7 +244,7 @@ function library:make_resizable(frame)
 	local Frame = Instance.new("TextButton")
 	Frame.Position = dim2(1, -10, 1, -10)
 	Frame.BorderColor3 = rgb(0, 0, 0)
-	Frame.Size = dim2(0, 10, 0, 10)
+	Frame.Size = dim2(0, 15, 0, 15)
 	Frame.BorderSizePixel = 0
 	Frame.BackgroundColor3 = rgb(255, 255, 255)
 	Frame.Parent = frame
@@ -460,7 +460,7 @@ function library:window(properties)
 		Parent = inline1,
 		Name = "",
 		BorderColor3 = Color3.fromRGB(34, 34, 34),
-		Size = UDim2.new(1, 0, 0, 2),
+		Size = UDim2.new(3, 0, 0, 3),
 		BorderSizePixel = 0,
 		BackgroundColor3 = themes.preset.accent,
 	})
