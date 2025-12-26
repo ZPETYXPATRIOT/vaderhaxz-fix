@@ -433,154 +433,117 @@ function library:window(properties)
 	}
 
 	local animated_text = library:animation(cfg.name .. " | private")
+	--watermark start
+        function library:watermark(options)
+            local cfg = {
+                name = options.name or "nebulahax";
+            }
+            
+            -- Instances
+                local outline = library:create("Frame", {
+                    Parent = library.gui;
+                    Size = dim2(0, 0, 0, 18);
+                    Position = dim2(0, 50, 0, 50);
+                    BorderColor3 = rgb(0, 0, 0);
+                    BorderSizePixel = 0;
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    BackgroundColor3 = rgb(46, 46, 46)
+                });	library:apply_theme(outline, "c", "BackgroundColor3");  library:draggify(outline)
 
-	-- watermark
-	local __holder = library:create("Frame", {
-		Parent = library.gui,
-		Name = "",
-		BackgroundTransparency = 1,
-		Position = UDim2.new(0, 20, 0, 20),
-		BorderColor3 = Color3.fromRGB(19, 19, 19),
-		ZIndex = 2,
-		AutomaticSize = Enum.AutomaticSize.X,
-		BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-	})
+                local inline = library:create("Frame", {
+                    Parent = outline;
+                    Position = dim2(0, 1, 0, 1);
+                    BorderColor3 = rgb(0, 0, 0);
+                    BorderSizePixel = 0;
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    BackgroundColor3 = rgb(21, 21, 21)
+                });	library:apply_theme(inline, "e", "BackgroundColor3")
+                
+                local menu_title = library:create("TextLabel", {
+                    FontFace = library.font;
+                    Parent = inline;
+                    TextColor3 = rgb(255, 255, 255);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Text = "[ ] ";
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    Size = dim2(1, -4, 1, 0);
+                    Position = dim2(0, 4, 0, -2);
+                    BackgroundTransparency = 1;
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    BorderSizePixel = 0;
+                    ZIndex = 2;
+                    TextSize = 12;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                });
+                
+                local uigradient = library:create("UIGradient", {
+                    Color = rgbseq{rgbkey(0, rgb(255, 0, 0)), rgbkey(0.17, rgb(255, 255, 0)), rgbkey(0.33, rgb(0, 255, 0)), rgbkey(0.5, rgb(0, 255, 255)), rgbkey(0.67, rgb(0, 0, 255)), rgbkey(0.83, rgb(255, 0, 255)), rgbkey(1, rgb(255, 0, 0))};
+                    Transparency = numseq{numkey(0, -1), numkey(1, -1)};
+                    Parent = menu_title
+                });
+                
+                library:create("UIPadding", {
+                    PaddingTop = dim(0, 7);
+                    PaddingBottom = dim(0, 6);
+                    Parent = inline;
+                    PaddingRight = dim(0, 8);
+                    PaddingLeft = dim(0, 4)
+                });
+                
+                local misc_text = library:create("TextLabel", {
+                    FontFace = library.font;
+                    Parent = inline;
+                    TextColor3 = rgb(255, 255, 255);
+                    BorderColor3 = rgb(0, 0, 0);
+                    Text = "[                  ] | game : baseplate | ping : 32";
+                    AutomaticSize = Enum.AutomaticSize.XY;
+                    Size = dim2(1, -4, 1, 0);
+                    Position = dim2(0, 4, 0, -2);
+                    BackgroundTransparency = 1;
+                    TextXAlignment = Enum.TextXAlignment.Left;
+                    BorderSizePixel = 0;
+                    ZIndex = 2;
+                    TextSize = 12;
+                    BackgroundColor3 = rgb(255, 255, 255)
+                });
+                
+                library:create("UIPadding", {
+                    PaddingBottom = dim(0, 1);
+                    PaddingRight = dim(0, 1);
+                    Parent = outline
+                });
+            --end
 
-	local inline1 = library:create("Frame", {
-		Parent = __holder,
-		Name = "",
-		Active = true,
-		Draggable = true,
-		BorderColor3 = Color3.fromRGB(0, 0, 0),
-		Size = UDim2.new(0, ((#animated_text / 2) * 5) + 13, 0, 40),
-		BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-	})
+            function cfg.update_text(text)
+                misc_text.Text = "[ "
+                
+                for i = 1, string.len(cfg.name) do 
+                    misc_text.Text ..= " "
+                end  
+                
+                misc_text.Text ..= " ] fps: 1000 objects rendeed: 1000"
+                menu_title.Text = "[ " .. cfg.name .. " ]"
+            end 
 
-	local accent_line = library:create("Frame", {
-		Parent = inline1,
-		Name = "",
-		BorderColor3 = Color3.fromRGB(34, 34, 34),
-		Size = UDim2.new(1, 0, 0, 2),
-		BorderSizePixel = 0,
-		BackgroundColor3 = themes.preset.accent,
-	})
+            cfg.update_text("a")
 
-	library:apply_theme(accent_line, "accent", "BackgroundColor3")
+            task.spawn(function()
+                while true do
+                    local offset = tick() * 0.2
+                    
+                    uigradient.Color = rgbseq{
+                        rgbkey(0, hsv(offset % 1, 1, 1)), 
+                        rgbkey(0.17, hsv((offset + 0.17) % 1, 1, 1)), 
+                        rgbkey(0.33, hsv((offset + 0.33) % 1, 1, 1)), 
+                        rgbkey(0.5, hsv((offset + 0.5) % 1, 1, 1)), 
+                        rgbkey(0.67, hsv((offset + 0.67) % 1, 1, 1)), 
+                        rgbkey(0.83, hsv((offset + 0.83) % 1, 1, 1)), 
+                        rgbkey(1, hsv((offset + 1) % 1, 1, 1))
+                    }
 
-	local depth = library:create("Frame", {
-		Parent = inline1,
-		Name = "",
-		BackgroundTransparency = 0.5,
-		Position = UDim2.new(0, 0, 0, 1),
-		BorderColor3 = Color3.fromRGB(0, 0, 0),
-		Size = UDim2.new(1, 0, 0, 1),
-		BorderSizePixel = 0,
-		BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-	})
-
-	local inline2 = library:create("Frame", {
-		Parent = inline1,
-		Name = "",
-		Position = UDim2.new(0, 2, 0, 2),
-		BorderColor3 = Color3.fromRGB(0, 0, 0),
-		Size = UDim2.new(1, -4, 1, -4),
-		BorderSizePixel = 0,
-		BackgroundColor3 = Color3.fromRGB(26, 26, 26),
-	})
-
-	local main = library:create("Frame", {
-		Parent = inline2,
-		Name = "",
-		Position = UDim2.new(0, 2, 0, 2),
-		BorderColor3 = Color3.fromRGB(57, 57, 57),
-		Size = UDim2.new(1, -4, 1, -4),
-		BackgroundColor3 = Color3.fromRGB(26, 26, 26),
-	})
-
-	local tab_inline = library:create("Frame", {
-		Parent = main,
-		Name = "",
-		Position = UDim2.new(0, 6, 0, 6),
-		BorderColor3 = Color3.fromRGB(19, 19, 19),
-		Size = UDim2.new(1, -12, 1, -12),
-		BorderSizePixel = 0,
-		BackgroundColor3 = Color3.fromRGB(19, 19, 19),
-	})
-
-	local tabs = library:create("Frame", {
-		Parent = tab_inline,
-		Name = "",
-		Position = UDim2.new(0, 2, 0, 2),
-		BorderColor3 = Color3.fromRGB(56, 56, 56),
-		Size = UDim2.new(1, -4, 1, -4),
-		BackgroundColor3 = Color3.fromRGB(22, 22, 22),
-	})
-
-	local name = library:create("TextLabel", {
-		Parent = tabs,
-		Name = "",
-		FontFace = library.font,
-		TextColor3 = Color3.fromRGB(170, 170, 170),
-		BorderColor3 = Color3.fromRGB(0, 0, 0),
-		Text = "ledger.live",
-		TextStrokeTransparency = 0.5,
-		Size = UDim2.new(0, 0, 1, 0),
-		Position = UDim2.new(0, 8, 0, 0),
-		BackgroundTransparency = 1,
-		TextXAlignment = Enum.TextXAlignment.Left,
-		BorderSizePixel = 0,
-		AutomaticSize = Enum.AutomaticSize.X,
-		TextSize = 12,
-		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-	})
-
-	local TEXT_ANIMATION_GRADIENT = library:create("UIGradient", {
-		Parent = name,
-		Name = "",
-		Color = ColorSequence.new({
-			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-			ColorSequenceKeypoint.new(0.01, themes.preset.accent),
-			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)),
-		}),
-	})
-
-	local UIPadding = library:create("UIPadding", {
-		Parent = tabs,
-		Name = "",
-		PaddingRight = UDim.new(0, 21),
-	})
-
-	local glow = library:create("ImageLabel", {
-		Parent = accent_line,
-		Name = "",
-		ImageColor3 = themes.preset.accent,
-		ScaleType = Enum.ScaleType.Slice,
-		ImageTransparency = 0.8999999761581421,
-		BorderColor3 = Color3.fromRGB(0, 0, 0),
-		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-		Image = "http://www.roblox.com/asset/?id=18245826428",
-		BackgroundTransparency = 1,
-		Position = UDim2.new(0, -20, 0, -20),
-		Size = UDim2.new(1, 40, 0, 42),
-		ZIndex = 2,
-		BorderSizePixel = 0,
-		SliceCenter = Rect.new(Vector2.new(21, 21), Vector2.new(79, 79)),
-	})
-
-	library:apply_theme(glow, "accent", "ImageColor3")
-
-	task.spawn(function()
-		while true do
-			if __holder.Visible then
-				for i = 1, #animated_text do
-					task.wait(0.2)
-					name.Text = animated_text[i]
-				end
-			end
-			task.wait(0.2)
-		end
-	end)
-	--
+                    task.wait()
+                end 
+            end)
 
 	-- window
 	local inline1 = library:create("Frame", {
